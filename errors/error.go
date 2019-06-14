@@ -36,7 +36,7 @@ func (p *Error) JSON(rsp *api.Response) error {
 }
 
 // New New
-func New(rsp *api.Response, err error, code int, format string, vals ...interface{}) error {
+func New(err error, code int, format string, vals ...interface{}) error {
 	return &Error{
 		OrgErr:  err,
 		Code:    code,
