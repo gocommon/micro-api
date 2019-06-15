@@ -23,8 +23,3 @@ func JSON(rsp *api.Response, code int32, i interface{}) error {
 
 	return nil
 }
-
-// JSONERR JSONERR
-func JSONERR(rsp *api.Response, err *errors.Error) {
-
-}
