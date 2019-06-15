@@ -23,4 +23,24 @@ func Test_parse(t *testing.T) {
 		t.Logf("%#v != %#v", err2.Error(), err.Error())
 		t.Fail()
 	}
+
+	if !IsAPIError(str) {
+		t.Fail()
+	}
+
+	if IsAPIError("文件不存在【err】file not found") {
+		t.Fail()
+	}
+
+	if IsAPIError(":文件不存在【err】file not found") {
+		t.Fail()
+	}
+
+	if IsAPIError("d:文件不存在【err】file not found") {
+		t.Fail()
+	}
+
+	if !IsAPIError("78:文件不存在【err】file not found") {
+		t.Fail()
+	}
 }

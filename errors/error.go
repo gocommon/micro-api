@@ -87,3 +87,22 @@ func Parse(str string) *Error {
 func ErrorEqual(e1, e2 *Error) bool {
 	return e1.Code == e2.Code && e1.Message == e2.Message && e1.OrgErr.Error() == e2.OrgErr.Error()
 }
+
+// IsAPIError IsAPIError是不是
+func IsAPIError(str string) bool {
+	if strings.Index(str, OrgErrSeparation) < 0 {
+		return false
+	}
+
+	idx := strings.Index(str, CodeSeparation)
+	if idx < 0 {
+		return false
+	}
+
+	_, err := strconv.Atoi(str[:idx])
+	if err != nil {
+		return false
+	}
+
+	return true
+}
