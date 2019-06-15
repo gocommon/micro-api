@@ -3,13 +3,22 @@ package errors
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"strconv"
+	"strings"
 
 	api "github.com/micro/micro/api/proto"
 )
 
 // ErrHTTPCode 统一返回错误代码
 var ErrHTTPCode int32 = 911
+
+// OrgErrSeparation OrgErrSeparation
+const OrgErrSeparation = "【err】"
+
+// CodeSeparation CodeSeparation
+const CodeSeparation = ":"
 
 // Error Error
 type Error struct {
@@ -19,7 +28,7 @@ type Error struct {
 }
 
 func (p *Error) Error() string {
-	return fmt.Sprintf("%d-%s:%v", p.Code, p.Message, p.OrgErr)
+	return fmt.Sprintf("%d%s%s%s%v", p.Code, CodeSeparation, p.Message, OrgErrSeparation, p.OrgErr)
 }
 
 // JSON JSON
@@ -42,4 +51,39 @@ func New(err error, code int, format string, vals ...interface{}) error {
 		Code:    code,
 		Message: fmt.Sprintf(format, vals...),
 	}
+}
+
+// Parse Parse
+func Parse(str string) *Error {
+
+	e := &Error{}
+
+	if len(str) == 0 {
+		return e
+	}
+
+	a1 := strings.Split(str, OrgErrSeparation)
+	if len(a1) > 1 {
+		e.OrgErr = errors.New(strings.Join(a1[1:], OrgErrSeparation))
+	}
+
+	if idx := strings.Index(a1[0], CodeSeparation); idx > -1 {
+		var err error
+		e.Code, err = strconv.Atoi(string(a1[0][:idx]))
+		if err != nil {
+			e.Message = a1[0]
+		} else {
+			e.Message = string(a1[0][idx+1:])
+		}
+
+	} else {
+		e.Message = a1[0]
+	}
+
+	return e
+}
+
+// ErrorEqual ErrorEqual
+func ErrorEqual(e1, e2 *Error) bool {
+	return e1.Code == e2.Code && e1.Message == e2.Message && e1.OrgErr.Error() == e2.OrgErr.Error()
 }
