@@ -7,8 +7,6 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
-
-	api "github.com/micro/micro/api/proto"
 )
 
 // ErrHTTPCode 统一返回错误代码
@@ -32,16 +30,13 @@ func (p *Error) Error() string {
 }
 
 // JSON JSON
-func (p *Error) JSON(rsp *api.Response) error {
-	rsp.StatusCode = ErrHTTPCode
+func (p *Error) JSON() string {
 
 	b := new(bytes.Buffer)
 
 	json.NewEncoder(b).Encode(p)
 
-	rsp.Body = b.String()
-
-	return nil
+	return b.String()
 }
 
 // New New
@@ -88,8 +83,8 @@ func ErrorEqual(e1, e2 *Error) bool {
 	return e1.Code == e2.Code && e1.Message == e2.Message && e1.OrgErr.Error() == e2.OrgErr.Error()
 }
 
-// IsAPIError IsAPIError是不是
-func IsAPIError(str string) bool {
+// IsErrorString IsErrorString是不是
+func IsErrorString(str string) bool {
 	if strings.Index(str, OrgErrSeparation) < 0 {
 		return false
 	}
@@ -105,4 +100,10 @@ func IsAPIError(str string) bool {
 	}
 
 	return true
+}
+
+// IsError IsError
+func IsError(err error) bool {
+	_, ok := err.(*Error)
+	return ok
 }

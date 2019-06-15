@@ -24,23 +24,28 @@ func Test_parse(t *testing.T) {
 		t.Fail()
 	}
 
-	if !IsAPIError(str) {
+	if !IsError(err2) {
 		t.Fail()
 	}
 
-	if IsAPIError("文件不存在【err】file not found") {
+	if !IsErrorString(str) {
 		t.Fail()
 	}
 
-	if IsAPIError(":文件不存在【err】file not found") {
+	if IsErrorString("文件不存在【err】file not found") {
 		t.Fail()
 	}
 
-	if IsAPIError("d:文件不存在【err】file not found") {
+	if IsErrorString(":文件不存在【err】file not found") {
 		t.Fail()
 	}
 
-	if !IsAPIError("78:文件不存在【err】file not found") {
+	if IsErrorString("d:文件不存在【err】file not found") {
 		t.Fail()
 	}
+
+	if !IsErrorString("78:文件不存在【err】file not found") {
+		t.Fail()
+	}
+
 }
