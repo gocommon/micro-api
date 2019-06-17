@@ -54,7 +54,7 @@ func Parse(str string) *Error {
 	e := &Error{}
 
 	if len(str) == 0 {
-		return e
+		return nil
 	}
 
 	a1 := strings.Split(str, OrgErrSeparation)
