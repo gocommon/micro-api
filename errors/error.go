@@ -40,7 +40,7 @@ func (p *Error) JSON() string {
 }
 
 // New New
-func New(err error, code int, format string, vals ...interface{}) error {
+func New(err error, code int, format string, vals ...interface{}) *Error {
 	return &Error{
 		OrgErr:  err,
 		Code:    code,
