@@ -53,6 +53,15 @@ func (p *Reqeust) Post(key string) string {
 	return ""
 }
 
+// Form Form
+func (p *Reqeust) Form(key string) string {
+	if v := p.Post(key); len(v) == 0 {
+		return v
+	}
+
+	return p.Query(key)
+}
+
 // Method Method
 func (p *Reqeust) Method() string {
 	return p.req.Method
