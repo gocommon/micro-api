@@ -20,13 +20,14 @@ const CodeSeparation = ":"
 
 // Error Error
 type Error struct {
+	ID      string `json:"id"` // request uuid auto add from gateway
 	Code    int    `json:"code"`
 	Message string `json:"message"`
 	OrgErr  error  `json:"-"` // 原始error, 不需要返回给客户端，用于打印错误日志
 }
 
 func (p *Error) Error() string {
-	return fmt.Sprintf("%d%s%s%s%v", p.Code, CodeSeparation, p.Message, OrgErrSeparation, p.OrgErr)
+	return fmt.Sprintf("%d%s%s%s%v.%s", p.Code, CodeSeparation, p.Message, OrgErrSeparation, p.OrgErr, p.ID)
 }
 
 // JSON JSON

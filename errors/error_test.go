@@ -14,7 +14,8 @@ func Test_parse(t *testing.T) {
 
 	str := "404:文件不存在【err】file not found"
 
-	if str != err.Error() {
+	if str+"." != err.Error() {
+		t.Error(1)
 		t.Fail()
 	}
 
@@ -25,26 +26,29 @@ func Test_parse(t *testing.T) {
 	}
 
 	if !IsError(err2) {
+		t.Errorf("!IsError(err2) ")
 		t.Fail()
 	}
 
 	if !IsErrorString(str) {
+		t.Errorf("!IsErrorString(str)")
 		t.Fail()
 	}
 
-	if IsErrorString("文件不存在【err】file not found") {
+	if IsErrorString("文件不存在【err】file not found.") {
+		t.Error("IsErrorString(文件不存在【err】file not found.)")
 		t.Fail()
 	}
 
-	if IsErrorString(":文件不存在【err】file not found") {
+	if IsErrorString(":文件不存在【err】file not found.") {
 		t.Fail()
 	}
 
-	if IsErrorString("d:文件不存在【err】file not found") {
+	if IsErrorString("d:文件不存在【err】file not found.") {
 		t.Fail()
 	}
 
-	if !IsErrorString("78:文件不存在【err】file not found") {
+	if !IsErrorString("78:文件不存在【err】file not found.") {
 		t.Fail()
 	}
 
