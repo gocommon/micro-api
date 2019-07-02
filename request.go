@@ -115,3 +115,22 @@ func (p *Reqeust) User() *url.Userinfo {
 	}
 	return nil
 }
+
+// RealIP RealIP
+func (p *Reqeust) RealIP() string {
+
+	ip := ""
+
+	if ipPair := p.req.Header["X-Forwarded-For"]; ipPair != nil && len(ipPair.Values) > 0 {
+		ipStr := ipPair.Values[0]
+
+		ips := strings.Split(ipStr, ",")
+		if len(ips) > 0 {
+			ip = ips[0]
+		}
+	} else if ipPair := p.req.Header["X-Real-IP"]; ipPair != nil && len(ipPair.Values) > 0 {
+		ip = ipPair.Values[0]
+	}
+
+	return ip
+}
